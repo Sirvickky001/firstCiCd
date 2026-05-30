@@ -1,0 +1,20 @@
+name: Hello World
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print a message
+        run: echo "Hello from GitHub Actions!"
+
+      - name: Show runner OS
+        run: echo "Runner OS is $RUNNER_OS"
+
+      - name: Show directory
+        run: pwd && ls -la
