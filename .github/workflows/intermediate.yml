@@ -1,0 +1,43 @@
+name: Intermediate Pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  APP_NAME: secureshop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Print context info
+        run: |
+          echo "App: $APP_NAME"
+          echo "SHA: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Actor: ${{ github.actor }}"
+
+      - name: Simulate test output
+        run: echo "Tests passed on Node ${{ matrix.node-version }}"
+
+  report:
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+
+    steps:
+      - name: Summary
+        run: echo "All matrix jobs done. Status downstream."
